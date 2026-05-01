@@ -12,7 +12,8 @@ import {
   Upload,
   Download,
   Calculator,
-  Sparkles
+  Sparkles,
+  FlaskConical
 } from 'lucide-react';
 import { Trade, TradeFormData, TradeStatus, TradeDirection, DashboardStats, EquityPoint } from './types';
 import { TradeForm } from './components/TradeForm';
@@ -21,6 +22,7 @@ import { EquityChart } from './components/EquityChart';
 import { TradeList } from './components/TradeList';
 import { PositionSizer } from './components/PositionSizer';
 import { AIAnalyst } from './components/AIAnalyst';
+import { BacktestLab } from './components/BacktestLab';
 
 // Initial Mock Data
 const MOCK_TRADES: Trade[] = [
@@ -34,7 +36,7 @@ const MOCK_TRADES: Trade[] = [
 function App() {
   const [trades, setTrades] = useState<Trade[]>(MOCK_TRADES);
   const [showForm, setShowForm] = useState(false);
-  const [view, setView] = useState<'dashboard' | 'journal' | 'sizer' | 'analysis'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'journal' | 'sizer' | 'analysis' | 'backtest'>('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -368,6 +370,13 @@ function App() {
             <Sparkles size={20} />
             <span className="font-medium">AI Analysis</span>
           </button>
+          <button 
+            onClick={() => { setView('backtest'); setMobileMenuOpen(false); }} 
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${view === 'backtest' ? 'bg-zinc-800 text-amber-400' : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'}`}
+          >
+            <FlaskConical size={20} />
+            <span className="font-medium">Backtesting</span>
+          </button>
         </nav>
 
         <div className="absolute bottom-0 w-full p-4 border-t border-zinc-800/50">
@@ -390,6 +399,7 @@ function App() {
              {view === 'journal' && 'Trade Journal'}
              {view === 'sizer' && 'Position Sizer'}
              {view === 'analysis' && 'AI Analysis'}
+             {view === 'backtest' && 'Backtesting Lab'}
            </h1>
            <p className="text-zinc-500 text-sm">Welcome back, check your performance.</p>
         </div>
@@ -527,6 +537,11 @@ function App() {
            </div>
         )}
 
+        {view === 'backtest' && (
+          <div className="animate-fade-in">
+            <BacktestLab trades={trades} />
+          </div>
+        )}
 
       </main>
 
